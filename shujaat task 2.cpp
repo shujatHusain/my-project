@@ -36,25 +36,24 @@ public:
         }
     }
 
-    Node* findMiddle() {
-        if (head == nullptr) return nullptr;
-
-        Node* slow = head;
-        Node* fast = head;
-
-        while (fast != nullptr && fast->next != nullptr) {
-            slow = slow->next;
-            fast = fast->next->next;
-        }
-
-        return slow;
-    }
-
-    void printList() {
+    void forwardTraversal() {
         Node* temp = head;
         while (temp != nullptr) {
             cout << temp->data << " ";
             temp = temp->next;
+        }
+        cout << endl;
+    }
+
+    void backwardTraversal() {
+        if (head == nullptr) return;
+        Node* temp = head;
+        while (temp->next != nullptr) {
+            temp = temp->next;
+        }
+        while (temp != nullptr) {
+            cout << temp->data << " ";
+            temp = temp->prev;
         }
         cout << endl;
     }
@@ -68,12 +67,11 @@ int main() {
     dll.insertAtEnd(40);
     dll.insertAtEnd(50);
 
-    dll.printList();
+    cout << "Forward Traversal: ";
+    dll.forwardTraversal();
 
-    Node* middle = dll.findMiddle();
-    if (middle != nullptr) {
-        cout << "Middle Node: " << middle->data << endl;
-    }
+    cout << "Backward Traversal: ";
+    dll.backwardTraversal();
 
     return 0;
 }
