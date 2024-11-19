@@ -1,94 +1,47 @@
 #include <iostream>
+#include <string>
 using namespace std;
-
+class Person {
+    int per_id;
+    string per_name;
+    int per_age;
+public:
+    void input() {
+        cin >> per_id >> per_name >> per_age;
+    }
+    void output() {
+        cout << per_id << " " << per_name << " " << per_age << endl;
+    }
+};
 struct Node {
-    int data;
+    Person data;
     Node* next;
 };
-
 class LinkedList {
-public:
     Node* head;
-
-    LinkedList() {
-        head = nullptr;
-    }
-
-    void insert(int value) {
-        Node* newNode = new Node();
-        newNode->data = value;
-        newNode->next = head;
+public:
+    LinkedList() : head(nullptr) {}
+    void insert(Person p) {
+        Node* newNode = new Node{p, head};
         head = newNode;
     }
-
-    void deleteNode(int value) {
-        Node* temp = head;
-        Node* prev = nullptr;
-
-        if (temp != nullptr && temp->data == value) {
-            head = temp->next;
-            delete temp;
-            return;
-        }
-
-        while (temp != nullptr && temp->data != value) {
-            prev = temp;
-            temp = temp->next;
-        }
-
-        if (temp == nullptr) return;
-
-        prev->next = temp->next;
-        delete temp;
-    }
-
-    bool search(int value) {
-        Node* temp = head;
-        while (temp != nullptr) {
-            if (temp->data == value) return true;
-            temp = temp->next;
-        }
-        return false;
-    }
-
     void display() {
         Node* temp = head;
-        while (temp != nullptr) {
-            cout << temp->data << " ";
+        while (temp) {
+            temp->data.output();
             temp = temp->next;
         }
-        cout << endl;
     }
 };
-
 int main() {
     LinkedList list;
-    int value;
-
-    for (int i = 0; i < 5; i++) {
-        cout << "Enter value for node " << i + 1 << ": ";
-        cin >> value;
-        list.insert(value);
+    int n;
+    cin >> n;
+    for (int i = 0; i < n; ++i) {
+        Person p;
+        p.input();
+        list.insert(p);
     }
-
     list.display();
-
-    cout << "Enter value to insert: ";
-    cin >> value;
-    list.insert(value);
-    list.display();
-
-    cout << "Enter value to delete: ";
-    cin >> value;
-    list.deleteNode(value);
-    list.display();
-
-    cout << "Enter value to search: ";
-    cin >> value;
-    if (list.search(value))
-        cout << "Value found" << endl;
-    else
-        cout << "Value not found" << endl;
-
     return 0;
 }

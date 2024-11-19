@@ -1,14 +1,14 @@
 #include <iostream>
 using namespace std;
-void insertionSort(int arr[], int n) {
-    for (int i = 1; i < n; i++) {
-        int key = arr[i];
-        int j = i - 1;
-        while (j >= 0 && arr[j] > key) {
-            arr[j + 1] = arr[j];
-            j = j - 1;
+void bubbleSort(int arr[], int n) {
+    for (int i = 0; i < n-1; i++) {
+        for (int j = 0; j < n-i-1; j++) {
+            if (arr[j] > arr[j+1]) {
+                int temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+            }
         }
-        arr[j + 1] = key;
     }
 }
 void printArray(int arr[], int n) {
@@ -19,7 +19,7 @@ void printArray(int arr[], int n) {
 int main() {
     int arr[] = {53, 13, 36, 73, 61, 88, 51, 64, 97, 12};
     int n = sizeof(arr) / sizeof(arr[0]);
-    insertionSort(arr, n);
+    bubbleSort(arr, n);
     printArray(arr, n);
     return 0;
 }

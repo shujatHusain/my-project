@@ -1,81 +1,53 @@
 #include <iostream>
+#include <string>
 using namespace std;
-
-class Node {
+class Person {
+    int per_id;
+    string per_name;
+    int per_age;
 public:
-    Node* next;
-    int data;
-
-    Node(int value) {
-        next = NULL;
-        data = value;
+    void input() {
+        cin >> per_id >> per_name >> per_age;
+    }
+    void output() {
+        cout << per_id << " " << per_name << " " << per_age << endl;
     }
 };
-
-class Queue {
-    Node* front;
-    Node* rear;
-    int size;
-
+struct Node {
+    Person data;
+    Node* next;
+};
+class LinkedList {
+    Node* head;
+    Node* tail;
 public:
-    Queue() {
-        front = rear = NULL;
-        size = 0;
-    }
-
-    void enqueue(int value) {
-        Node* newNode = new Node(value);
-        if (rear == NULL) {
-            front = rear = newNode;
+    LinkedList() : head(nullptr), tail(nullptr) {}
+    void insert(Person p) {
+        Node* newNode = new Node{p, nullptr};
+        if (tail == nullptr) {
+            head = tail = newNode;
         } else {
-            rear->next = newNode;
-            rear = newNode;
+            tail->next = newNode;
+            tail = newNode;
         }
-        size++;
     }
-
-    int dequeue() {
-        if (front == NULL) {
-            cout << "Queue Underflow!" << endl;
-            return -1;
-        }
-        Node* temp = front;
-        int value = front->data;
-        front = front->next;
-        if (front == NULL) {
-            rear = NULL;
-        }
-        delete temp;
-        size--;
-        return value;
-    }
-
-    int count() {
-        return size;
-    }
-
     void display() {
-        Node* temp = front;
-        while (temp != NULL) {
-            cout << temp->data << " ";
+        Node* temp = head;
+        while (temp) {
+            temp->data.output();
             temp = temp->next;
         }
-        cout << endl;
     }
 };
-
 int main() {
-    Queue q;
-    q.enqueue(10);
-    q.enqueue(20);
-    q.enqueue(30);
-    cout << "Queue elements: ";
-    q.display();
-    cout << "Number of elements in the queue: " << q.count() << endl;
-    q.dequeue();
-    cout << "Queue elements after dequeue: ";
-    q.display();
-    cout << "Number of elements in the queue: " << q.count() << endl;
-
+    LinkedList list;
+    int n;
+    cin >> n;
+    for (int i = 0; i < n; ++i) {
+        Person p;
+        p.input();
+        list.insert(p);
+    }
+    list.display();
     return 0;
 }

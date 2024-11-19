@@ -1,75 +1,48 @@
 #include <iostream>
 using namespace std;
-
-class Queue {
-    struct Node {
-        int data;
-        Node* next;
-    };
-    Node* front;
-    Node* rear;
-
+class Node {
 public:
-    Queue() {
-        front = rear = nullptr;
-    }
-
-    ~Queue() {
-        clear();
-    }
-
-    void enqueue(int item) {
-        Node* newNode = new Node;
-        newNode->data = item;
-        newNode->next = nullptr;
-        if (rear == nullptr) {
-            front = rear = newNode;
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {}
+};
+class LinkedList {
+private:
+    Node* head;
+    Node* tail;
+    bool insertAtHead;
+public:
+    LinkedList() : head(nullptr), tail(nullptr), insertAtHead(true) {}
+    void insert(int data) {
+        Node* newNode = new Node(data);
+        if (head == nullptr) {
+            head = tail = newNode;
         } else {
-            rear->next = newNode;
-            rear = newNode;
-        }
-    }
-
-    void dequeue() {
-        if (front != nullptr) {
-            Node* temp = front;
-            front = front->next;
-            delete temp;
-            if (front == nullptr) {
-                rear = nullptr;
+            if (insertAtHead) {
+                newNode->next = head;
+                head = newNode;
+            } else {
+                tail->next = newNode;
+                tail = newNode;
             }
-        } else {
-            cout << "Queue is empty. Cannot dequeue." << endl;
         }
+        insertAtHead = !insertAtHead;
     }
-
-    void clear() {
-        while (front != nullptr) {
-            dequeue();
-        }
-    }
-
-    bool isEmpty() const {
-        return front == nullptr;
-    }
-
     void display() {
-        Node* current = front;
-        while (current != nullptr) {
+        Node* current = head;
+        while (current) {
             cout << current->data << " ";
             current = current->next;
         }
         cout << endl;
     }
 };
-
 int main() {
-    Queue q;
-    q.enqueue(10);
-    q.enqueue(20);
-    q.enqueue(30);
-    q.display();
-    q.clear();
-    q.display();
+    LinkedList list;
+    list.insert(1);
+    list.insert(2);
+    list.insert(3);
+    list.insert(4);
+    list.display();
     return 0;
 }
