@@ -1,145 +1,119 @@
-#include <iostream>
-using namespace std;
-
-class Node {
-public:
-    int data;
-    Node* prev;
-    Node* next;
-
-    Node(int val) {
-        data = val;
-        prev = nullptr;
-        next = nullptr;
-    }
-};
-
-class DoublyLinkedList {
-    Node* head;
-
-public:
-    DoublyLinkedList() {
-        head = nullptr;
-    }
-
-    void insertAtBeginning(int val) {
-        Node* newNode = new Node(val);
-        if (head == nullptr) {
-            head = newNode;
-        } else {
-            newNode->next = head;
-            head->prev = newNode;
-            head = newNode;
-        }
-    }
-
-    void insertAtEnd(int val) {
-        Node* newNode = new Node(val);
-        if (head == nullptr) {
-            head = newNode;
-        } else {
-            Node* temp = head;
-            while (temp->next != nullptr) {
-                temp = temp->next;
-            }
-            temp->next = newNode;
-            newNode->prev = temp;
-        }
-    }
-
-    void insertAtPosition(int val, int pos) {
-        Node* newNode = new Node(val);
-        if (pos == 1) {
-            insertAtBeginning(val);
-            return;
-        }
-
-        Node* temp = head;
-        for (int i = 1; i < pos - 1 && temp != nullptr; i++) {
-            temp = temp->next;
-        }
-
-        if (temp == nullptr) {
-            insertAtEnd(val);
-        } else {
-            newNode->next = temp->next;
-            if (temp->next != nullptr) {
-                temp->next->prev = newNode;
-            }
-            temp->next = newNode;
-            newNode->prev = temp;
-        }
-    }
-
-    void deleteFromBeginning() {
-        if (head == nullptr) return;
-        Node* temp = head;
-        head = head->next;
-        if (head != nullptr) {
-            head->prev = nullptr;
-        }
-        delete temp;
-    }
-
-    void deleteFromEnd() {
-        if (head == nullptr) return;
-        Node* temp = head;
-        if (head->next == nullptr) {
-            head = nullptr;
-        } else {
-            while (temp->next != nullptr) {
-                temp = temp->next;
-            }
-            temp->prev->next = nullptr;
-        }
-        delete temp;
-    }
-
-    void deleteFromPosition(int pos) {
-        if (head == nullptr) return;
-        if (pos == 1) {
-            deleteFromBeginning();
-            return;
-        }
-
-        Node* temp = head;
-        for (int i = 1; i < pos && temp != nullptr; i++) {
-            temp = temp->next;
-        }
-
-        if (temp == nullptr) return;
-        if (temp->next != nullptr) {
-            temp->next->prev = temp->prev;
-        }
-        if (temp->prev != nullptr) {
-            temp->prev->next = temp->next;
-        }
-        delete temp;
-    }
-
-    void printList() {
-        Node* temp = head;
-        while (temp != nullptr) {
-            cout << temp->data << " ";
-            temp = temp->next;
-        }
-        cout << endl;
-    }
-};
-
-int main() {
-    DoublyLinkedList dll;
-    dll.insertAtBeginning(10);
-    dll.printList();
-    dll.insertAtEnd(20);
-    dll.printList();
-    dll.insertAtPosition(15, 2);
-    dll.printList();
-    dll.deleteFromBeginning();
-    dll.printList();
-    dll.deleteFromEnd();
-    dll.printList();
-    dll.deleteFromPosition(1);
-    dll.printList();
-    return 0;
+#include<iostream> 
+using namespace std; 
+ 
+class Node { 
+public: 
+    Node* next; 
+    int data; 
+     
+    Node(int value) { 
+        next = NULL; 
+        data = value; 
+    } 
+}; 
+ 
+class Queue { 
+    Node* front; 
+    Node* rear; 
+    int size; 
+    int maxSize; 
+ 
+public: 
+    Queue(int capacity) { 
+        front = rear = NULL; 
+        size = 0; 
+        maxSize = capacity; 
+    } 
+ 
+    bool isFull() { 
+        return size == maxSize; 
+    } 
+ 
+    bool isEmpty() { 
+        return size == 0; 
+    } 
+ 
+    void enqueue(int value) { 
+        if (isFull()) { 
+            cout << "Queue Overflow! Cannot enqueue " << value << endl; 
+            return; 
+        } 
+         
+        Node* newNode = new Node(value); 
+        if (rear == NULL) { 
+            front = rear = newNode; 
+        } else { 
+            rear->next = newNode; 
+            rear = newNode; 
+        } 
+        size++; 
+    } 
+ 
+    int dequeue() { 
+        if (isEmpty()) { 
+            cout << "Queue Underflow! Cannot dequeue." << endl; 
+            return -1; 
+        } 
+ 
+        Node* temp = front; 
+        int value = front->data; 
+        front = front->next; 
+         
+        if (front == NULL) { 
+            rear = NULL; 
+        } 
+ 
+        delete temp; 
+        size--; 
+        return value; 
+    } 
+ 
+    int count() { 
+        return size; 
+    } 
+ 
+    void clear() { 
+        while (!isEmpty()) { 
+            dequeue(); 
+        } 
+        cout << "Queue cleared." << endl; 
+    } 
+ 
+    void display() { 
+        if (isEmpty()) { 
+            cout << "Queue is empty!" << endl; 
+            return; 
+        } 
+         
+        Node* temp = front; 
+        cout << "Queue contents: "; 
+        while (temp != NULL) { 
+            cout << temp->data << " "; 
+            temp = temp->next; 
+        } 
+        cout << endl; 
+    } 
+}; 
+ 
+int main() { 
+    Queue q(5); 
+ 
+    q.enqueue(10); 
+    q.enqueue(20); 
+    q.enqueue(30); 
+    q.enqueue(40); 
+    q.enqueue(50); 
+     
+    q.display(); 
+     
+    cout << "Queue size: " << q.count() << endl; 
+ 
+    q.enqueue(60); 
+     
+    cout << "Dequeuing: " << q.dequeue() << endl; 
+    q.display(); 
+     
+    q.clear(); 
+    q.display(); 
+     return 0;
 }
